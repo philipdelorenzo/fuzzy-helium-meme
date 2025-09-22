@@ -1,0 +1,23 @@
+on:
+  push:
+    branches:
+      - "*"
+      - "!main"
+
+name: "Trigger: Shellcheck"
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  shellcheck:
+    name: Shellcheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run ShellCheck
+        uses: ludeeus/action-shellcheck@master
+        with:
+          scandir: './scripts'
+          check_together: 'yes'
+          #additional_files: ''
