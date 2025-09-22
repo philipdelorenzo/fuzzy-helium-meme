@@ -97,9 +97,7 @@ unset_data()
 {
     unset _GROUP
     unset BASE
-    unset _INFO_NAME
-    unset LOCATION
-    unset _PUBLICFILENAME
+    unset BASEDIR
 }
 
 # Let's clean up the data.
