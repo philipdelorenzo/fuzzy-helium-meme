@@ -13,15 +13,18 @@ greater efficiency.
 
 
 ## TL;DR
+
 For developer experience, a Makefile _(for MacOS only)_ has been provided in the repo root, you can quickly install these with the following command:
 
 ```bash
 make init
 ```
 
-### What this does?
+Once this command is run, please see the [Helium API Client Documentation](./helium/README.md).
 
-This installs _(using Brew)_ `asdf`, and `doppler-cli` _(This is what we will use to obfuscate our Environment Variables, and Secrets)_.
+#### What does `make init` do?
+
+This installs _(using Brew)_ `asdf`, and `doppler-cli` _(This is what we will use to obfuscate our Environment Variables, and Secrets)_, along with `kubectl`, `kustomize`, and other needed tooling.
 
 Once asdf is installed, it then get's any required plug-ins, and runs the installation of the plugins within the _"shimmed"_ environment. This does not alter your system binaries or interpreters. You can confirm this by running `$> which python` after the installation is complete!
 
@@ -47,6 +50,7 @@ subgraph "asdf-binaries"
     asdf --> Python
     asdf --> Terraform
     asdf --> Kubectl
+    asdf --> Kustomize
 end
 
 subgraph kind["Kind Cluster (Local)"]
@@ -55,11 +59,10 @@ end
 
 Terraform ===> kind["Kind Cluster (Local)"]
 Terraform ===> aurora["AWS Aurora"]
-Kubectl -.-> kind
+Kubectl -.->|Kustomize| kind
 Python --> Poetry --> app[FastAPI Aurora Client]
 doppler -.->|Doppler Token| d-api((Doppler API)) -.-> |Injected Environment| app
 app <==> aurora
 ```
 
-
-These are the steps required to build and push the application in this repo to it's required destination.
+When running the make commands, this is what is happening under-the-hood.
