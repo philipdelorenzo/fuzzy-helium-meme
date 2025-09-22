@@ -11,7 +11,6 @@ greater efficiency.
 - [Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
 - [Python 3.13+](https://www.python.org/)
 
-
 ## TL;DR
 
 For developer experience, a Makefile _(for MacOS only)_ has been provided in the repo root, you can quickly install these with the following command:
