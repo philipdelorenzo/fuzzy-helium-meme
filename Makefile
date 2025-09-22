@@ -20,21 +20,20 @@ init: ##@development Installs needed prerequisites and software to develop the p
 	#@echo "[INFO] - To enter the poetry environment, run: 'poetry shell' from the '${service}' directory -- From here just type '${service}' to run the cli"
 	#@echo "[INFO] - For ad-hoc cli commands run, 'poetry run ${service}' to run the cli outside of the poetry shell"
 
+all: ##@development Runs all the development steps
+	$(info ********** Running All Development Steps **********)
+	@$(MAKE) init
+	@$(MAKE) poetry-install
+	@$(MAKE) poetry-run
+
 .PHONY: poetry-install
 poetry-install: ##@development Installs poetry dependencies for the API client
 	$(info ********** Installing Developer Tooling Prerequisites **********)
 	@bash -c "cd helium || exit 1 && ./../.python/bin/poetry install"
 
-.PHONY: encrypt-configs
-encrypt-configs: ##@development Encrypts the configuration files
-	$(info ********** Encrypting Configuration File **********)
-	@if grep -Fxq '[sops]' mando/config.ini; then echo "Config file already encrypted"; exit 0; fi
-	@sops --encrypt --in-place --encrypted-regex 'google|staging_database|staging_database_name|staging_database_port|staging_database_user|staging_database_password|production_database|production_database_name|production_database_port|production_database_user|production_database_password' --pgp `gpg --fingerprint "sreservice@manscaped.com" | grep pub -A 1 | grep -v pub | sed s/\ //g` mando/config.ini
-
-.PHONY: decrypt-configs
-decrypt-configs: ##@development Decrypts the configuration files
-	$(info ********** Decrypting Configuration File **********)
-	@sops --decrypt --in-place --ignore-mac mando/config.ini
+poetry-run: ##@development Installs poetry dependencies for the API client
+	$(info ********** Installing Developer Tooling Prerequisites **********)
+	@bash -c "./.python/bin/poetry --directory helium run python helium/main.py"
 
 .PHONY: lint format
 isort: ##@code-quality Running isort on the project
