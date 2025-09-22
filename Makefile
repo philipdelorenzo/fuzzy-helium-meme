@@ -37,7 +37,7 @@ poetry-run: ##@development Installs poetry dependencies for the API client
 
 .PHONY: lint format
 isort: ##@code-quality Running isort on the project
-	$(info ********** Decrypting Configuration File **********)
+	$(info ********** Running Isort on the project **********)
 	@./.python/bin/python -m isort . --gitignore
 
 format: ##@code-quality Running black on the project

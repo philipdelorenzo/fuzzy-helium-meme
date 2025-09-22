@@ -20,4 +20,4 @@ _MONGODB_URI = f"{MONGODB_URI}&appName={os.getenv('APP_NAME')}"
 client = motor.motor_asyncio.AsyncIOMotorClient(_MONGODB_URI)
 
 # Reference to the database
-database = client[MONGODB_NAME] # type: ignore -- Replace 'my_database' with your DB name/DOPPLER
+database = client[MONGODB_NAME]  # type: ignore -- Replace 'my_database' with your DB name/DOPPLER
