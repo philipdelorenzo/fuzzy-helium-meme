@@ -1,15 +1,15 @@
 # This CODEOWNERS file is to ensure that we have proper PR approvals
 
-[SRE]
+# The SRE team owns the CI/CD and automation that runs the service
 .github/workflows/*  @philipdelorenzo
 scripts/init.sh      @philipdelorenzo
 .github/workflows/*  @philipdelorenzo
 scripts/python.txt   @philipdelorenzo
 
-[Platform]
+# The Platform team owns the infrastructure and code that runs the service
 Makefile              @philipdelorenzo
 Brewfile              @philipdelorenzo
 .tool-versions        @philipdelorenzo
 
-[Legal]
+# The Legal team owns the legal and compliance aspects of the service
 LICENSE               @philipdelorenzo
