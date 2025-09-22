@@ -2,8 +2,9 @@
 # If you'd like your target to show up use the following:
 #
 # my_target: ##@category_name sample description for my_target
-service := "hppd"
-service_title := "Helium Project - Philip De Lorenzo"
+service := "helium"
+service_title := "Helium API Client"
+service_author := "Philip DeLorenzo"
 
 default: help
 
@@ -22,7 +23,7 @@ init: ##@development Installs needed prerequisites and software to develop the p
 .PHONY: poetry-install
 poetry-install: ##@development Installs poetry dependencies for the API client
 	$(info ********** Installing Developer Tooling Prerequisites **********)
-	@bash -c ".python/bin/poetry install"
+	@bash -c "cd helium || exit 1 && ./../.python/bin/poetry install"
 
 .PHONY: encrypt-configs
 encrypt-configs: ##@development Encrypts the configuration files
@@ -38,7 +39,7 @@ decrypt-configs: ##@development Decrypts the configuration files
 .PHONY: lint format
 isort: ##@code-quality Running isort on the project
 	$(info ********** Decrypting Configuration File **********)
-	@./.python/bin/python -m isort .
+	@./.python/bin/python -m isort . --gitignore
 
 format: ##@code-quality Running black on the project
 	$(info ********** Running Black on the project **********)
