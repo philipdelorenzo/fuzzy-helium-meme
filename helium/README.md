@@ -1,6 +1,6 @@
 # Helium API Client --> Aurora AWS RDS
 
-Welcome to the Helium API Client that securely connects you to an AWS Aurora database instance for persistant data.
+Welcome to the Helium API Client that securely connects you to an AWS Aurora database instance for persistent data.
 
 ## STOP!
 
