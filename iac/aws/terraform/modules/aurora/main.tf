@@ -61,29 +61,29 @@ resource "aws_secretsmanager_secret_version" "db_password" {
 
 # Aurora Cluster
 resource "aws_rds_cluster" "aurora" {
-  cluster_identifier      = "${var.name_prefix}-aurora"
-  engine                  = "aurora-postgresql"
-  engine_version          = "15"
-  database_name           = var.DB_NAME
-  master_username         = var.DB_USERNAME
-  master_password         = var.DB_PASSWORD
+  cluster_identifier = "${var.name_prefix}-aurora"
+  engine             = "aurora-postgresql"
+  engine_version     = "15"
+  database_name      = var.DB_NAME
+  master_username    = var.DB_USERNAME
+  master_password    = var.DB_PASSWORD
   #backup_retention_period = var.backup_retention_period
   #preferred_backup_window = "07:00-09:00"
   #preferred_maintenance_window = "sun:05:00-sun:06:00"
-  
+
   # Security
-  storage_encrypted              = true
+  storage_encrypted               = true
   kms_key_id                      = var.kms_key_arn
   vpc_security_group_ids          = [aws_security_group.aurora.id]
   db_subnet_group_name            = aws_db_subnet_group.aurora.name
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.aurora.name
-  
+
   # Backup and Monitoring
   copy_tags_to_snapshot = true
   deletion_protection   = var.deletion_protection
   skip_final_snapshot   = true
   #final_snapshot_identifier = "${var.name_prefix}-aurora-final-snapshot-${formatdate("YYYY-MM-DD-hhmm", timestamp())}"
-  
+
   # Enable logging
   enabled_cloudwatch_logs_exports = ["postgresql"]
 
@@ -104,18 +104,18 @@ resource "aws_rds_cluster_instance" "aurora" {
   instance_class     = var.instance_class
   engine             = aws_rds_cluster.aurora.engine
   engine_version     = aws_rds_cluster.aurora.engine_version
-  
+
   # Security
   publicly_accessible = false
-  
+
   # Monitoring
   monitoring_interval = 60
   monitoring_role_arn = aws_iam_role.enhanced_monitoring.arn
-  
+
   # Performance Insights
   performance_insights_enabled    = true
   performance_insights_kms_key_id = var.kms_key_arn
-  
+
   db_parameter_group_name = aws_db_parameter_group.aurora.name
 
   tags = merge(var.tags, {

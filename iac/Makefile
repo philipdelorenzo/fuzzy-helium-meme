@@ -29,6 +29,14 @@ IS_TOKEN := $$(bash -c "$$DTOKEN_EVAL")
 prereqs:
 	@bash -l "scripts/prereqs.sh"
 
+fmt: ##@development Formats the terraform files
+	$(info ********** Formatting Terraform Files **********)
+	@terraform fmt -recursive aws/terraform/environments
+	@terraform fmt -recursive aws/terraform/modules
+	@terraform fmt -recursive local/terraform
+	@echo "[INFO] - Terraform Format Complete!"
+
+
 bootstrap: ##@development Bootstraps the development environment
 	$(info ********** Bootstrapping Development Environment (Creating AWS s3 Backend) **********)
 	@$(MAKE) prereqs
