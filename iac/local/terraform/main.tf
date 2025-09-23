@@ -9,6 +9,6 @@ terraform {
 
 # Let's configure our local kubectl to use the kind cluster we just created.
 resource "local_file" "kind_cluster_config" {
-  filename = "echo ${pathexpand("~/.kube/kind-cluster-config.yaml")}"
+  filename = "${pathexpand(var.kubectl_config_path)}"
   content  = trimspace(kind_cluster.default.kubeconfig)
 }
