@@ -1,0 +1,19 @@
+import os
+
+import uvicorn
+
+service_name = "helium"
+HOST = "0.0.0.0"
+PORT = os.getenv("PORT", 8000)
+
+if isinstance(PORT, str):
+    PORT = int(PORT)
+
+if __name__ == "__main__":
+    uvicorn.run(
+        f"{service_name}.app:app",
+        host=HOST,
+        port=PORT,
+        reload=True,
+        log_level="info",
+    )
