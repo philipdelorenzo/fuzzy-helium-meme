@@ -5,8 +5,15 @@ from fastapi.responses import JSONResponse, RedirectResponse
 # async def on_startup():
 #    await create_db_and_tables()
 
-app = FastAPI()
-
+app = FastAPI(
+    title="Helium Project API",
+    description="API for the Helium Project",
+    contact={
+            "name": "Philip De Lorenzo",
+            "url": "https://github.com/philipdelorenzo",
+            "email": "philip.delorenzo@gmail.com",
+        }
+)
 
 @app.get("/")
 async def read_root():
