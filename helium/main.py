@@ -6,7 +6,7 @@ service_name = "helium"
 HOST = "0.0.0.0"
 PORT = os.getenv("PORT", 8000)
 
-if type(PORT) == str:
+if isinstance(PORT, str):
     PORT = int(PORT)
 
 if __name__ == "__main__":
