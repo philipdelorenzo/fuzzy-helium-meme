@@ -33,11 +33,11 @@ flowchart LR;
         POSTGRES_PORT
         POSTGRES_USER
         POSTGRES_PASSWORD
-        ] ==> AuroraConfig
+        ] ==> aurora["Aurora Cursor"]
     end
 
-    subgraph "Python FastAPI<br/>Example: Helium"
-        AuroraConfig
+    subgraph "Python FastAPI -- Helium<br/>"
+        aurora --> FastAPI/Uvicorn
     end
 
     AppConfig ==> UTC-DB
