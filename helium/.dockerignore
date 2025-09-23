@@ -1,0 +1,17 @@
+scripts/
+tests/
+.python
+.github
+.gitignore
+.dockerignore
+.isort.cfg
+.shellcheckrc
+.tool-versions
+CODEOWNERS
+Brewfile
+Makefile
+Dockerfile
+README.md
+pyproject.toml
+poetry.lock
+requirements.txt

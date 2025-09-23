@@ -1,5 +1,9 @@
 # REPO CONTENTS
 .python/
+**/terraform.tfstate
+**/.terraform
+**/.terraform.lock.hcl
+**helium-cluster-config
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

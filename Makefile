@@ -26,6 +26,17 @@ all: ##@development Runs all the development steps
 	@$(MAKE) poetry-install
 	@$(MAKE) poetry-run
 
+build: ##@development Builds the Docker image for the API client
+	$(info ********** Building the Docker Image **********)
+	@bash -c "cd helium || exit 1 && ./../.python/bin/poetry export -f requirements.txt --without-hashes -o production.txt"
+	@cd helium || exit 1 && docker build -t fuzzyheliummeme/${service}:latest .
+	@$(MAKE) clean
+	@echo "[INFO] - Docker image build for ${service_title} Complete!"
+
+clean: ##@development Cleans up the development environment
+	$(info ********** Cleaning Up the Development Environment **********)
+	@rm -rf helium/production.txt
+
 .PHONY: poetry-install
 poetry-install: ##@development Installs poetry dependencies for the API client
 	$(info ********** Installing Developer Tooling Prerequisites **********)
@@ -45,9 +56,10 @@ format: ##@code-quality Running black on the project
 	@./.python/bin/python -m black .
 
 .PHONY: clean
-clean: ##@misc Remove all build artifacts
+clean-all: ##@misc Remove all build artifacts
 	@echo "Cleaning up..."
 	@rm -rf .python
+	@rm -rf helium/production.txt
 	@echo "Cleaned up!"
 
 help: ##@misc Show this help.

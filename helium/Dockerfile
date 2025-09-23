@@ -1,14 +1,24 @@
 FROM python:3.13.0
 
+# Note: We will need the DOPPLER_TOKEN run-time arg to be passed in when we run the container
+# This will be passed in as an ENV variable to the container
 ARG USER=helium
-ARG DOPPLER_PROJECT=
-ARG DOPPLER_CONFIG=
-ARG DOPPLER_TOKEN=
+
+# We're going to create a user to run the services within the container - user and group both called 'helium'
+RUN groupadd ${USER} && useradd -m -g ${USER} ${USER}
 
 # Let's create a user to run the services within the container
-RUN groupadd ${USER} && useradd -m -g ${USER} ${USER}
+# libpq-dev is needed for psycopg2
+# gnupg is needed for installing doppler
 RUN apt-get update && \
-    apt-get install -y apt-transport-https ca-certificates bash curl libpq-dev gnupg && \
+    apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    bash \
+    curl \
+    dumb-init \
+    libpq-dev \
+    gnupg && \
     curl -sLf --retry 3 --tlsv1.2 --proto "=https" 'https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key' | gpg --dearmor -o /usr/share/keyrings/doppler-archive-keyring.gpg && \
     echo "deb [signed-by=/usr/share/keyrings/doppler-archive-keyring.gpg] https://packages.doppler.com/public/cli/deb/debian any-version main" | tee /etc/apt/sources.list.d/doppler-cli.list && \
     apt-get update && \
@@ -16,15 +26,12 @@ RUN apt-get update && \
 
 # Let's run the steps to build this image
 WORKDIR /app
-
 COPY . .
-COPY scripts/entrypoint.sh /app/entrypoint.sh
 
 # Let's ensure that we have the needed permissions to execute the services within the container
 RUN chown -R ${USER}:${USER} /app && \
     pip install --upgrade pip && \
     pip install -r /app/production.txt && \
-    chmod +x /app/entrypoint.sh && \
     mkdir /app/data && \
     chown -R ${USER}:${USER} /app/data
 
@@ -32,11 +39,8 @@ RUN chown -R ${USER}:${USER} /app && \
 USER ${USER}
 
 # Set the DOPPLER_TOKEN from the arg.
-ENV DOPPLER_PROJECT=${DOPPLER_PROJECT}
-ENV DOPPLER_CONFIG=${DOPPLER_CONFIG}
-ENV DOPPLER_TOKEN=${DOPPLER_TOKEN}
 EXPOSE 8000
 
 # Run the app
-ENTRYPOINT [ "/app/entrypoint.sh" ]
+ENTRYPOINT ["/usr/bin/dumb-init", "--"]
 CMD [ "python", "/app/main.py" ]
