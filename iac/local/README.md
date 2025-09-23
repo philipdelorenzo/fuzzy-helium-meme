@@ -21,3 +21,13 @@ You can manually delete the cluster using the kind CLI:
 ```bash
 kind delete cluster --name "helium-cluster"
 ```
+
+## Kubectl
+
+Get contexts:
+
+```bash
+kubectl config get-contexts
+```
+
+You should see the newly built `kind-helium-cluster`.

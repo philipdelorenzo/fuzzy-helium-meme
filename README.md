@@ -70,3 +70,10 @@ When running the make commands, this is what is happening under-the-hood.
 ## Developer Documentation
 
 See the [Developer Documentation](./helium/README.md) for details on building, running, deploying, etc.
+
+## IaC Documentation
+
+In order to build the Helium application, there are some extra pieces that are needed - this are all available after running
+`make init` but you will need to add an aws profile _(a profile in the AWS account you would like to use to install and run the infrastructure)_.
+
+See the [IaC Documentation](./iac/README.md)

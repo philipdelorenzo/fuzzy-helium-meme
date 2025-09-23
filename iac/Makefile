@@ -7,7 +7,6 @@ service_title := "Helium API Client"
 service_author := "Philip DeLorenzo"
 DOPPLER_TOKEN := $(shell cat .doppler)
 AWS_PROFILE := $(shell cat .aws_profile)
-
 default: help
 
 # We need to have a doppler token set to proceed, this is by design so that bad actors cannot access the secrets, or environments.
@@ -41,7 +40,24 @@ bootstrap: ##@development Bootstraps the development environment
 init: ##@development Installs needed prerequisites and software to develop the project
 	$(info ********** Installing Developer Tooling Prerequisites **********)
 	@$(MAKE) prereqs
-	@doppler run --token ${DOPPLER_TOKEN} --command "cd aws/terraform/environments/dev || exit 1 && terraform init"
+	@doppler run --token ${DOPPLER_TOKEN} --command "cd aws/terraform/environments/dev || exit 1 && terraform init -backend-config='profile=${AWS_PROFILE}'"
+
+validate: ##@development Validates the terraform files
+	$(info ********** Validating Terraform Files **********)
+	@doppler run --token ${DOPPLER_TOKEN} --command "cd aws/terraform/environments/dev || exit 1 && terraform validate"
+
+plan: ##@development Plans the terraform changes to be applied
+	$(info ********** Planning Terraform Changes **********)
+	@doppler run --token ${DOPPLER_TOKEN} --command "cd aws/terraform/environments/dev || exit 1 && terraform plan -out=tfplan -var='profile=${AWS_PROFILE}'"
+
+apply: ##@development Applies the terraform changes to be applied
+	$(info ********** Applying Terraform Changes **********)
+	@doppler run --token ${DOPPLER_TOKEN} --command "cd aws/terraform/environments/dev || exit 1 && terraform apply tfplan"
+	@echo "[INFO] - Terraform Apply Complete!"
+
+destroy: ##@development Destroys all terraform-managed infrastructure
+	$(info ********** Destroying All Terraform-Managed Infrastructure **********)
+	@doppler run --token ${DOPPLER_TOKEN} --command "cd aws/terraform/environments/dev || exit 1 && terraform destroy -var='profile=${AWS_PROFILE}'"
 
 help: ##@misc Show this help.
 	@echo $(MAKEFILE_LIST)

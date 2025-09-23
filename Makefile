@@ -17,8 +17,6 @@ init: ##@development Installs needed prerequisites and software to develop the p
 	@asdf install
 	@asdf reshim
 	@echo "[INFO] - Installation Complete!"
-	#@echo "[INFO] - To enter the poetry environment, run: 'poetry shell' from the '${service}' directory -- From here just type '${service}' to run the cli"
-	#@echo "[INFO] - For ad-hoc cli commands run, 'poetry run ${service}' to run the cli outside of the poetry shell"
 
 all: ##@development Runs all the development steps
 	$(info ********** Running All Development Steps **********)
