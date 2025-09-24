@@ -9,7 +9,7 @@ import pytoml
 from icecream import ic
 from pythonjsonlogger.json import JsonFormatter
 
-from _common import pyproject_path
+from _common import pyproject_path, pyproject_toml
 
 # Basic configuration for logging
 logging.basicConfig(
@@ -47,10 +47,10 @@ def get_python_version() -> str:
         str: The python version from pyproject.toml. (#.#.#)
     """
     # Check if the file exists
-    if not os.path.exists(pyproject_path):
+    if not os.path.exists(pyproject_toml):
         raise FileNotFoundError(f"pyproject.toml not found in {os.getcwd()}")
 
-    with open(pyproject_path, "r") as f:
+    with open(pyproject_toml, "r") as f:
         pyproject_data = pytoml.load(f)
 
     assert (
