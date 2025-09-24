@@ -68,7 +68,7 @@ make destroy
 
 If you run into an issue where the secret will not delete due to the grace period:
 
-
+### See 
 ##### Remove Secret
 
 `aws secretsmanager delete-secret --secret-id helium-dev-db-credentials --force-delete-without-recovery --profile <your-aws-profile>`
@@ -78,3 +78,23 @@ If you run into an issue where the secret will not delete due to the grace perio
 `aws rds describe-db-instances --query 'DBInstances[*].PubliclyAccessible' --profile <your-aws-profile>`
 
 It should return `[false]`.
+
+#### Outputs
+
+The `.aws_profile`, and `.doppler` files must exist, see [above](#stop) for more!
+
+If you need to just get the outputs of the Terraform:
+
+```bash
+CURDIR="$(pwd)"
+export DOPPLER_TOKEN="$(cat ${CURDIR}/.doppler)"
+export AWS_PROFILE="$(cat ${CURDIR}/.aws_profile)"
+
+doppler run --token ${DOPPLER_TOKEN} --command "cd aws/terraform/environments/dev || exit 1 && terraform refresh -var='profile=${AWS_PROFILE}'"
+
+doppler run --token ${DOPPLER_TOKEN} --command "cd aws/terraform/environments/dev || exit 1 && terraform output"
+
+unset CURDIR
+unset DOPPLER_TOKEN
+unset AWS_PROFILE
+```

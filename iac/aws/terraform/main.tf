@@ -36,11 +36,20 @@ module "aurora" {
   backup_retention_period = var.backup_retention_period
   deletion_protection     = var.deletion_protection
 
-  # From other modules
+  # Networking - from networking and security modules
   vpc_id                = module.networking.vpc_id
   private_subnet_ids    = module.networking.private_subnet_ids
   app_security_group_id = module.networking.app_security_group_id
   kms_key_arn           = module.security.kms_key_arn
 
   tags = local.common_tags
+}
+
+module "eks" {
+  source = "./modules/eks"
+
+  # Aurora - from aurora module
+  aurora_security_group_id = module.aurora.security_group_id
+  aurora_subnet_group_name = module.aurora.subnet_group_name
+  tags                     = local.common_tags
 }

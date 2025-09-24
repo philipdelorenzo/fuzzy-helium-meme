@@ -3,6 +3,16 @@ output "cluster_endpoint" {
   value       = aws_rds_cluster.aurora.endpoint
 }
 
+output "security_group_id" {
+  description = "Security group ID for the Aurora cluster"
+  value       = aws_security_group.aurora.id
+}
+
+output "subnet_group_name" {
+  description = "Subnet group name for the Aurora cluster"
+  value       = aws_db_subnet_group.aurora.name
+}
+
 output "cluster_reader_endpoint" {
   description = "Aurora cluster reader endpoint"
   value       = aws_rds_cluster.aurora.reader_endpoint
