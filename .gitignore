@@ -1,5 +1,15 @@
 # REPO CONTENTS
 .python/
+**/terraform.tfstate
+**/terraform.tfstate.backup
+**/.terraform
+**/.terraform.lock.hcl
+**/tfplan
+**helium-cluster-config
+**/.aws_profile
+**/.doppler
+**/.doppler.token
+**/doppler.token
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

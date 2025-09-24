@@ -17,14 +17,23 @@ init: ##@development Installs needed prerequisites and software to develop the p
 	@asdf install
 	@asdf reshim
 	@echo "[INFO] - Installation Complete!"
-	#@echo "[INFO] - To enter the poetry environment, run: 'poetry shell' from the '${service}' directory -- From here just type '${service}' to run the cli"
-	#@echo "[INFO] - For ad-hoc cli commands run, 'poetry run ${service}' to run the cli outside of the poetry shell"
 
 all: ##@development Runs all the development steps
 	$(info ********** Running All Development Steps **********)
 	@$(MAKE) init
 	@$(MAKE) poetry-install
 	@$(MAKE) poetry-run
+
+build: ##@development Builds the Docker image for the API client
+	$(info ********** Building the Docker Image **********)
+	@bash -c "cd helium || exit 1 && ./../.python/bin/poetry export -f requirements.txt --without-hashes -o production.txt"
+	@cd helium || exit 1 && docker build -t fuzzyheliummeme/${service}:latest .
+	@$(MAKE) clean
+	@echo "[INFO] - Docker image build for ${service_title} Complete!"
+
+clean: ##@development Cleans up the development environment
+	$(info ********** Cleaning Up the Development Environment **********)
+	@rm -rf helium/production.txt
 
 .PHONY: poetry-install
 poetry-install: ##@development Installs poetry dependencies for the API client
@@ -45,9 +54,10 @@ format: ##@code-quality Running black on the project
 	@./.python/bin/python -m black .
 
 .PHONY: clean
-clean: ##@misc Remove all build artifacts
+clean-all: ##@misc Remove all build artifacts
 	@echo "Cleaning up..."
 	@rm -rf .python
+	@rm -rf helium/production.txt
 	@echo "Cleaned up!"
 
 help: ##@misc Show this help.
