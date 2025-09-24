@@ -100,8 +100,8 @@ def prechecks(obj: list[dict]) -> bool:
     _draftrelease = get_draft_release_version(obj=obj)
     _prerelease = get_prerelease_version(obj=obj)
     _latest = get_latest_version(obj=obj)
-    _toml = get_toml_version() if os.path.isfile(os.path.join(os.getcwd(), "pyproject.toml")) else None
-    _pfo = get_pfo_version() if os.path.isfile(os.path.join(os.getcwd(), "pfo.json")) else None
+    _toml = get_toml_version() if os.path.isfile(os.path.join(pyproject_path, "pyproject.toml")) else None
+    _pfo = get_pfo_version() if os.path.isfile(os.path.join(pyproject_path, "pfo.json")) else None
 
     ic("Releases found in the repoistory")
     ic(f"Draft-Release: {_draftrelease}")
@@ -237,7 +237,7 @@ def get_toml_version() -> str:
     """
     # Check if the file exists
     if not os.path.exists(pyproject_path):
-        raise FileNotFoundError(f"pyproject.toml not found in {os.getcwd()}")
+        raise FileNotFoundError(f"pyproject.toml not found in {pyproject_path}")
 
     with open(pyproject_path, "r") as f:
         pyproject_data = pytoml.load(f)
