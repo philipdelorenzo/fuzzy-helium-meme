@@ -5,11 +5,11 @@ resource "aws_security_group" "aurora" {
   description = "Security group for Aurora database"
 
   ingress {
-    from_port       = 3306
-    to_port         = 3306
+    from_port       = 5432
+    to_port         = 5432
     protocol        = "tcp"
     security_groups = [aws_security_group.app.id]
-    description     = "MySQL/Aurora access from application"
+    description     = "PostgreSQL/Aurora access from application"
   }
 
   egress {
