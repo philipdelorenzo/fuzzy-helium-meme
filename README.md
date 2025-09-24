@@ -7,6 +7,14 @@ A simple PostgreSQL client, to connect with AWS Aurora.
 There are some prerequisites that will allow the developer to interact with this repo much easier, with
 greater efficiency.
 
+Local development requires a basic local PostgreSQL database:
+
+User: `postgres`
+Pass: `postgres`
+Database: `postgres`
+
+This just makes it simple - you can create whatever you like on your system.
+
 - [asdf](https://asdf-vm.com/)
 - [Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
 - [Python 3.13+](https://www.python.org/)
