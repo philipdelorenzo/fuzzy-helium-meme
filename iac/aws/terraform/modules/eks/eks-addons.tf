@@ -1,11 +1,11 @@
 # eks_addons.tf
 # EKS Add-ons for essential cluster functionality
 resource "aws_eks_addon" "coredns" {
-  cluster_name             = aws_eks_cluster.main.name
-  addon_name               = "coredns"
-  addon_version            = null # Use default version
-  resolve_conflicts_on_create        = "OVERWRITE"
-  service_account_role_arn = null
+  cluster_name                = aws_eks_cluster.main.name
+  addon_name                  = "coredns"
+  addon_version               = null # Use default version
+  resolve_conflicts_on_create = "OVERWRITE"
+  service_account_role_arn    = null
 
   depends_on = [
     aws_eks_node_group.main
@@ -15,32 +15,32 @@ resource "aws_eks_addon" "coredns" {
 }
 
 resource "aws_eks_addon" "kube_proxy" {
-  cluster_name             = aws_eks_cluster.main.name
-  addon_name               = "kube-proxy"
-  addon_version            = null # Use default version
-  resolve_conflicts_on_create        = "OVERWRITE"
-  service_account_role_arn = null
+  cluster_name                = aws_eks_cluster.main.name
+  addon_name                  = "kube-proxy"
+  addon_version               = null # Use default version
+  resolve_conflicts_on_create = "OVERWRITE"
+  service_account_role_arn    = null
 
   tags = local.common_tags
 }
 
 resource "aws_eks_addon" "vpc_cni" {
-  cluster_name             = aws_eks_cluster.main.name
-  addon_name               = "vpc-cni"
-  addon_version            = null # Use default version
-  resolve_conflicts_on_create        = "OVERWRITE"
-  service_account_role_arn = null
+  cluster_name                = aws_eks_cluster.main.name
+  addon_name                  = "vpc-cni"
+  addon_version               = null # Use default version
+  resolve_conflicts_on_create = "OVERWRITE"
+  service_account_role_arn    = null
 
   tags = local.common_tags
 }
 
 # Optional: AWS EBS CSI Driver for persistent storage
 resource "aws_eks_addon" "ebs_csi_driver" {
-  cluster_name             = aws_eks_cluster.main.name
-  addon_name               = "aws-ebs-csi-driver"
-  addon_version            = null # Use default version
-  resolve_conflicts_on_create        = "OVERWRITE"
-  service_account_role_arn = aws_iam_role.ebs_csi_driver_role.arn
+  cluster_name                = aws_eks_cluster.main.name
+  addon_name                  = "aws-ebs-csi-driver"
+  addon_version               = null # Use default version
+  resolve_conflicts_on_create = "OVERWRITE"
+  service_account_role_arn    = aws_iam_role.ebs_csi_driver_role.arn
 
   depends_on = [
     aws_eks_node_group.main,

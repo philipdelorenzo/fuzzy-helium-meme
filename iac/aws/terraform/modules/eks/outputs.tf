@@ -83,8 +83,8 @@ output "cluster_name" {
 output "aurora_connection_info" {
   description = "Information for connecting to Aurora from EKS"
   value = {
-    database_port           = var.database_port
-    security_group_rule_id  = aws_security_group_rule.aurora_from_eks.id
-    allowed_source_sg       = aws_security_group.eks_node_sg.id
+    database_port          = var.database_port
+    security_group_rule_id = aws_security_group_rule.aurora_from_eks.id
+    allowed_source_sg      = aws_security_group.eks_node_sg.id
   }
 }

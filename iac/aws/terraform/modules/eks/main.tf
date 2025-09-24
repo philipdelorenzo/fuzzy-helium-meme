@@ -6,7 +6,7 @@
 resource "aws_cloudwatch_log_group" "eks_cluster" {
   name              = "/aws/eks/${var.cluster_name}/cluster"
   retention_in_days = 7
-  
+
   tags = merge(
     local.common_tags,
     {
@@ -19,7 +19,7 @@ resource "aws_cloudwatch_log_group" "eks_cluster" {
 resource "aws_kms_key" "eks_secrets" {
   description             = "KMS key for EKS secrets encryption"
   deletion_window_in_days = 7
-  
+
   tags = merge(
     local.common_tags,
     {
