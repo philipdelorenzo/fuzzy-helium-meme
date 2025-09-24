@@ -260,11 +260,11 @@ def get_pfo_version() -> str:
         str: The version from pfo.json. (#.#.#)
     """
     # Construct the path to pyproject.toml
-    pfo_path = os.path.join(os.getcwd(), "pfo.json")
+    pfo_path = os.path.join(pyproject_path, "pfo.json")
 
     # Check if the file exists
     if not os.path.exists(pfo_path):
-        raise FileNotFoundError(f"pfo.json not found in {os.getcwd()}")
+        raise FileNotFoundError(f"pfo.json not found in {pyproject_path}")
 
     with open(pfo_path, "r") as f:
         pfo_data = json.loads(f.read())
@@ -348,12 +348,12 @@ def draft_release(obj: list[dict]) -> str|None:
         obj=obj
     )  # Run some prechecks to make sure that the data is correct, this will raise an exception if the data is incorrect
 
-    if os.path.isfile(os.path.join(os.getcwd(), "pyproject.toml")):
+    if os.path.isfile(pyproject_toml):
         # If the toml flag is set, we will use the version from pyproject.toml
         ic("Using version from pyproject.toml")
         return f"v{get_toml_version()}"
-    
-    if os.path.isfile(os.path.join(os.getcwd(), "pfo.json")):
+
+    if os.path.isfile(os.path.join(pyproject_path, "pfo.json")):
         # If the pfo flag is set, we will use the version from pfo.json
         ic("Using version from pfo.json")
         return f"v{get_pfo_version()}"
