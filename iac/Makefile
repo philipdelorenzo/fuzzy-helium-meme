@@ -36,8 +36,7 @@ fmt: ##@development Formats the terraform files
 	@terraform fmt -recursive local/terraform
 	@echo "[INFO] - Terraform Format Complete!"
 
-
-bootstrap: ##@development Bootstraps the development environment
+bootstrap: ##@terraform Bootstraps the development environment
 	$(info ********** Bootstrapping Development Environment (Creating AWS s3 Backend) **********)
 	@$(MAKE) prereqs
 	@doppler run --token ${DOPPLER_TOKEN} --command "cd aws/bootstrap || exit 1 && terraform init"
@@ -45,25 +44,29 @@ bootstrap: ##@development Bootstraps the development environment
 	@doppler run --token ${DOPPLER_TOKEN} --command "cd aws/bootstrap || exit 1 && terraform apply tfplan"
 	@echo "[INFO] - Bootstrap Complete!"
 
-init: ##@development Installs needed prerequisites and software to develop the project
-	$(info ********** Installing Developer Tooling Prerequisites **********)
+init: ##@terraform Installs needed providers and initializes the terraform files
+	$(info ********** Initializing the Terraform Environment/Providers **********)
 	@$(MAKE) prereqs
 	@doppler run --token ${DOPPLER_TOKEN} --command "cd aws/terraform/environments/dev || exit 1 && terraform init -backend-config='profile=${AWS_PROFILE}'"
 
-validate: ##@development Validates the terraform files
+refresh: ##@terraform Refreshes the terraform state file
+	$(info ********** Refreshing the Terraform State File **********)
+	@doppler run --token ${DOPPLER_TOKEN} --command "cd aws/terraform/environments/dev || exit 1 && terraform refresh -var='profile=${AWS_PROFILE}'"
+
+validate: ##@terraform Validates the terraform files
 	$(info ********** Validating Terraform Files **********)
 	@doppler run --token ${DOPPLER_TOKEN} --command "cd aws/terraform/environments/dev || exit 1 && terraform validate"
 
-plan: ##@development Plans the terraform changes to be applied
+plan: ##@terraform Plans the terraform changes to be applied
 	$(info ********** Planning Terraform Changes **********)
 	@doppler run --token ${DOPPLER_TOKEN} --command "cd aws/terraform/environments/dev || exit 1 && terraform plan -out=tfplan -var='profile=${AWS_PROFILE}'"
 
-apply: ##@development Applies the terraform changes to be applied
+apply: ##@terraform Applies the terraform changes to be applied
 	$(info ********** Applying Terraform Changes **********)
 	@doppler run --token ${DOPPLER_TOKEN} --command "cd aws/terraform/environments/dev || exit 1 && terraform apply tfplan"
 	@echo "[INFO] - Terraform Apply Complete!"
 
-destroy: ##@development Destroys all terraform-managed infrastructure
+destroy: ##@terraform Destroys all terraform-managed infrastructure
 	$(info ********** Destroying All Terraform-Managed Infrastructure **********)
 	@doppler run --token ${DOPPLER_TOKEN} --command "cd aws/terraform/environments/dev || exit 1 && terraform destroy -var='profile=${AWS_PROFILE}'"
 
