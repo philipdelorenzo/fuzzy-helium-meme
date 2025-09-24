@@ -18,7 +18,7 @@ jobs:
       - name: Install Python Requirements
         run: |
           pip install -r ${{ github.workspace }}/.github/workflows/src/requirements.txt
-          poetry install --no-root
+          poetry --directory helium install --no-root
         shell: bash
 
       - name: Run Tests
