@@ -236,10 +236,10 @@ def get_toml_version() -> str:
         str: The version from pyproject.toml. (#.#.#)
     """
     # Check if the file exists
-    if not os.path.exists(pyproject_path):
+    if not os.path.exists(pyproject_toml):
         raise FileNotFoundError(f"pyproject.toml not found in {pyproject_path}")
 
-    with open(pyproject_path, "r") as f:
+    with open(pyproject_toml, "r") as f:
         pyproject_data = pytoml.load(f)
 
     assert (
