@@ -29,8 +29,52 @@ now be able to provision your backend:
 
 ### _TL;DR Developer Experience_
 
+The Makefile provides much smaller commands to run, for the basic usage that injects the needed variables from Doppler into the environment. This also runs the
+commands with the `--profile <your-profile>` in the terraform commands _(which ensures that 'default' doesn't trip you up)_.
+
+If you need to run ad-hoc commands, you can just copy the commands in the Makefile and run them directly, as long as you have the environment variables set in the SHELL.
+
 From the `iac` directory:
+
+```bash
+make fmt
+```
+
+```bash
+make validate
+```
 
 ```bash
 make bootstrap
 ```
+
+```bash
+make init
+```
+
+```bash
+make plan
+```
+
+```bash
+make apply
+```
+
+```bash
+make destroy
+```
+
+## Ad-Hoc Commands
+
+If you run into an issue where the secret will not delete due to the grace period:
+
+
+##### Remove Secret
+
+`aws secretsmanager delete-secret --secret-id helium-dev-db-credentials --force-delete-without-recovery --profile <your-aws-profile>`
+
+#### Check to ensure your AuroraDB is not publicly accessible
+
+`aws rds describe-db-instances --query 'DBInstances[*].PubliclyAccessible' --profile <your-aws-profile>`
+
+It should return `[false]`.

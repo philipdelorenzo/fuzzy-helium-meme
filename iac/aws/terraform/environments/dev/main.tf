@@ -21,7 +21,7 @@ module "aurora_stack" {
   DB_NAME                 = var.DB_NAME     # TF_VAR_DATABASE_NAME must be set in your environment or Doppler
   DB_USERNAME             = var.DB_USERNAME # TF_VAR_DB_USERNAME must be set in your environment or Doppler
   DB_PASSWORD             = var.DB_PASSWORD # TF_VAR_DB_PASSWORD must be set in your environment or Doppler
-  aurora_instance_class   = "db.t3.micro"
+  aurora_instance_class   = "db.t4g.medium"
   aurora_instance_count   = 1
   deletion_protection     = false
   backup_retention_period = 0
