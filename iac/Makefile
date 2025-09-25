@@ -5,7 +5,6 @@
 service := "helium"
 service_title := "Helium API Client"
 service_author := "Philip DeLorenzo"
-DOPPLER_TOKEN := $(shell cat .doppler)
 AWS_PROFILE := $(shell cat .aws_profile)
 default: help
 
@@ -18,7 +17,7 @@ export TOKEN_ALIVE_SCRIPT
 DOPPLER_TOKEN := $$(bash -c "$$TOKEN_ALIVE_SCRIPT")
 
 define DTOKEN_EVAL
-[[ "${DOPPLER_TOKEN}" == "false" ]] && echo "The .doppler file is missing, please set the Doppler token in this file." || echo 0
+[[ "${DOPPLER_TOKEN}" == "false" ]] && echo "[CRITICAL] - The .doppler file is missing, please set the Doppler token in this file." || echo 0
 endef
 export DTOKEN_EVAL
 
@@ -27,6 +26,7 @@ IS_TOKEN := $$(bash -c "$$DTOKEN_EVAL")
 ############# Development Section #############
 .PHONY: prereqs bootstrapinit
 prereqs:
+	@[[ ${IS_TOKEN} == "[CRITICAL] - The .doppler file is missing, please set the Doppler token in this file." ]] && (echo "${IS_TOKEN}" && exit 1)
 	@bash -l "scripts/prereqs.sh"
 
 fmt: ##@development Formats the terraform files

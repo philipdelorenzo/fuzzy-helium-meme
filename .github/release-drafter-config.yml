@@ -1,0 +1,43 @@
+name-template: "Philip De Lorenzo -- $APP_NAME v$RESOLVED_VERSION"
+tag-template: "v$RESOLVED_VERSION"
+categories:
+  - title: "🚀 Features"
+    label: "feature"
+  - title: "🐛 Bug Fixes"
+    labels: "fix"
+  - title: "🔥 Hot Fixes"
+    label: "hotfix"
+  - title: "🚅 Performance"
+    label: "performance"
+  - title: "😎 Refactor"
+    label: "refactor"
+  - title: "🧰 Maintenance"
+    labels:
+      - "chore"
+      - "documentation"
+change-template: "- $TITLE @$AUTHOR (#$NUMBER)"
+change-title-escapes: '\<*_&' # You can add # and @ to disable mentions, and add ` to disable code blocks.
+template: |
+  ## Philip De Lorenzo - ${APP_NAME} Release Notes
+
+  #### Philip De Lorenzo - ${APP_NAME} v$RESOLVED_VERSION
+
+  *This is the official release of ${APP_NAME} version $RESOLVED_VERSION.*
+  This tool is designed for testing purposes only, and to showcase the manner in which I work as a Platform Engineer/DevOps/SRE/Developer.
+
+  -- *Philip De Lorenzo - Platform Engineer*
+
+  [Example](https://github.com/philipdelorenzo/fuzzy-helium-meme)
+
+
+  ## Changes
+
+  $CHANGES
+
+  ## Installation
+
+  ```bash
+  # Install the latest version of Unity Project -- ${APP_NAME}
+  More coming soon...
+  ```
+  

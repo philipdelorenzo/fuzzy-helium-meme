@@ -1,0 +1,28 @@
+on:
+  workflow_call:
+
+jobs:
+  unit_tests:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13.0'
+    
+      - name: Install Python Requirements
+        run: |
+          pip install -r ${{ github.workspace }}/.github/workflows/src/requirements.txt
+          poetry --directory helium install --no-root
+        shell: bash
+
+      - name: Run Tests
+        run: |
+          echo "Running all unit tests..."
+          echo "Event Type: ${{ github.event_name }}"
+          #poetry run python -m pytest

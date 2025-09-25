@@ -68,7 +68,10 @@ make destroy
 
 If you run into an issue where the secret will not delete due to the grace period:
 
-### See 
+##### List PostgreSQL Versions
+
+`aws rds describe-db-engine-versions --engine aurora-postgresql --query '*[].[EngineVersion]' --output text --region <aws-region>`
+
 ##### Remove Secret
 
 `aws secretsmanager delete-secret --secret-id helium-dev-db-credentials --force-delete-without-recovery --profile <your-aws-profile>`
@@ -98,3 +101,7 @@ unset CURDIR
 unset DOPPLER_TOKEN
 unset AWS_PROFILE
 ```
+
+## EKS Documentation
+
+See [EKS Documentation](./aws/terraform/modules/eks/README.md)

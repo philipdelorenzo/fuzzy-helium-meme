@@ -8,8 +8,28 @@ service_author := "Philip DeLorenzo"
 
 default: help
 
+# We need to have a doppler token set to proceed, this is by design so that bad actors cannot access the secrets, or environments.
+define TOKEN_ALIVE_SCRIPT
+[[ -f .doppler ]] && cat .doppler || echo "false"
+endef
+export TOKEN_ALIVE_SCRIPT
+
+DOPPLER_TOKEN := $$(bash -c "$$TOKEN_ALIVE_SCRIPT")
+
+define DTOKEN_EVAL
+[[ "${DOPPLER_TOKEN}" == "false" ]] && echo "[CRITICAL] - The .doppler file is missing, please set the Doppler token in this file." || echo 0
+endef
+export DTOKEN_EVAL
+
+IS_TOKEN := $$(bash -c "$$DTOKEN_EVAL")
+
 ############# Development Section #############
-.PHONY: init
+.PHONY: init prereqs all build clean poetry-install poetry-run isort format clean-all
+prereqs:
+	$(info ********** Checking Developer Tooling Prerequisites **********)
+	@if [[ ${IS_TOKEN} == '[CRITICAL] - The .doppler file is missing, please set the Doppler token in this file.' ]]; then echo "${IS_TOKEN}" && exit 1; fi
+	@bash -l "scripts/prereqs.sh"
+
 init: ##@development Installs needed prerequisites and software to develop the project
 	$(info ********** Installing Developer Tooling Prerequisites **********)
 	@bash -l scripts/init.sh -a
@@ -38,11 +58,11 @@ clean: ##@development Cleans up the development environment
 .PHONY: poetry-install
 poetry-install: ##@development Installs poetry dependencies for the API client
 	$(info ********** Installing Developer Tooling Prerequisites **********)
-	@bash -c "cd helium || exit 1 && ./../.python/bin/poetry install"
+	@bash -c ".python/bin/poetry --directory helium install"
 
-poetry-run: ##@development Installs poetry dependencies for the API client
+poetry-run: prereqs ##@development Installs poetry dependencies for the API client
 	$(info ********** Installing Developer Tooling Prerequisites **********)
-	@bash -c "./.python/bin/poetry --directory helium run python helium/main.py"
+	@doppler run --token ${DOPPLER_TOKEN} --command "./.python/bin/poetry --directory helium run python helium/main.py --local"
 
 .PHONY: lint format
 isort: ##@code-quality Running isort on the project
