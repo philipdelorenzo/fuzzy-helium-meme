@@ -28,16 +28,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Configure AWS credentials (OIDC)
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID}}:role/GitHubOIDCRole
-        aws-region: ${{ secrets.AWS_REGION }}
-
-    - name: Log in to Amazon ECR
-      id: login-ecr
-      uses: aws-actions/amazon-ecr-login@v2
-
     - name: Install Python
       uses: actions/setup-python@v5
       with:
@@ -61,7 +51,17 @@ jobs:
         echo "latest_version=$_version" >> $GITHUB_OUTPUT
       shell: bash
 
+    - name: Configure AWS credentials (OIDC)
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID}}:role/GitHubOIDCRole
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Log in to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
     # Install kubectl (needed for the kustomize command)
+
     - name: Set up kubectl and Kustomize
       uses: azure/setup-kubectl@v3
       with:
@@ -74,8 +74,8 @@ jobs:
     - name: Deploy to Kubernetes
       run: |
         # Update kubeconfig (redundant but ensures config is fresh)
-        aws eks update-kubeconfig --name ${{ secrets.TF_VAR_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }} --profile ${{ secrets.AWS_PROFILE }}
-        aws eks get-token --cluster-name ${{ secrets.TF_VAR_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }} --profile ${{ secrets.AWS_PROFILE }}
+        aws eks update-kubeconfig --name ${{ secrets.TF_VAR_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
+        aws eks get-token --cluster-name ${{ secrets.TF_VAR_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
         
         # Ensure namespace exists
         kubectl apply -f ${{ github.workspace }}/${{ env.K8S_PREREQS_PATH }}/namespace.yaml
