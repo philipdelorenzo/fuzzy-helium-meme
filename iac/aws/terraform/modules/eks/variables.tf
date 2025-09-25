@@ -1,8 +1,7 @@
 # variables.tf
-variable "cluster_name" {
+variable "CLUSTER_NAME" {
   description = "Name of the EKS cluster"
   type        = string
-  default     = "my-eks-cluster"
 }
 
 variable "cluster_version" {
