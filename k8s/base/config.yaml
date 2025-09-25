@@ -6,7 +6,7 @@ metadata:
   labels:
     app: helium
 data:
-  APP_NAME: helium
-  IMAGE_NAME: pyops/helium
-  IMAGE_TAG: latest
-  REGION: us-west-2
+  APP_NAME: __APP_NAME__
+  IMAGE_NAME: __APP_NAME__
+  IMAGE_TAG: __IMAGE_TAG__
+  REGION: __REGION__

@@ -42,26 +42,24 @@ spec:
                   key: REGION
 
             # Postgres
-            - name: POSTGRES_DB
+            - name: DB_NAME
               valueFrom:
                 secretKeyRef:
-                  name: postgres
-                  key: POSTGRES_DB
-            - name: POSTGRES_USER
+                  name: auroradb
+                  key: DB_NAME
+            - name: DB_USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: postgres
-                  key: POSTGRES_USER
-            - name: POSTGRES_PASSWORD
+                  name: auroradb
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: postgres
-                  key: POSTGRES_PASSWORD
-            - name: DATABASE_URL
-              value: postgres://$(POSTGRES_USER):$(POSTGRES_PASSWORD)@$(POSTGRES_DB_SERVICE_HOST):$(POSTGRES_DB_SERVICE_PORT)/$(POSTGRES_DB)
+                  name: auroradb
+                  key: DB_PASSWORD
 
           ports:
-            - containerPort: 8501
+            - containerPort: 8080
           resources:
             limits:
               cpu: 200m
