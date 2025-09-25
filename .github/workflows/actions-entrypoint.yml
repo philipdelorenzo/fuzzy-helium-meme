@@ -147,20 +147,20 @@ jobs:
     secrets:
       # This is automatically provided by GitHub Actions, so we don't need to specify it in the workflow
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    
+
   # The build/push and deploy only run if this is a merged PR AND all previous jobs have succeeded
   # This ensures that we only build/deploy code that has passed all tests and checks
-  #build_and_push:
-  #  if: needs.dataReportJob.outputs.is_pr_merge == 'true'
-  #  needs: [update_release_draft, releasePreparation, dataReportJob, set-release-version]
-  #  uses: ./.github/workflows/dry-build-and-push.yml
-  #  with:
-  #    version: ${{ needs.set-release-version.outputs.draft_version }}
-  #  secrets:
-  #    region: ${{ secrets.REGION }}
-  #    project_id: ${{ secrets.PROJECT_ID }}
-  #    service_name: ${{ secrets.SERVICE_NAME }}
-  #    service_account: ${{ secrets.SERVICE_ACCOUNT }}
+  build_and_push:
+    if: needs.dataReportJob.outputs.is_pr_merge == 'true'
+    needs: [update_release_draft, releasePreparation, dataReportJob, set-release-version]
+    uses: ./.github/workflows/dry-build-and-push.yml
+    with:
+      version: ${{ needs.set-release-version.outputs.draft_version }}
+    secrets:
+      region: ${{ secrets.REGION }}
+      project_id: ${{ secrets.PROJECT_ID }}
+      service_name: ${{ secrets.SERVICE_NAME }}
+      service_account: ${{ secrets.SERVICE_ACCOUNT }}
 #
   #deploy:
   #  if: needs.dataReportJob.outputs.is_pr_merge == 'true'
