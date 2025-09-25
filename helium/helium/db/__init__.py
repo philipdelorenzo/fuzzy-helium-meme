@@ -1,13 +1,12 @@
 import os
 import asyncio
 from typing import Any
-from sqlalchemy import text
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy import text # type: ignore
+from sqlalchemy import create_engine # type: ignore
+from sqlalchemy.orm import sessionmaker # type: ignore
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession # type: ignore
 # In a file like helium/dependencies.py
-from sqlalchemy.orm import Session
-
+from sqlalchemy.orm import Session # type: ignore
 from helium.models.contact import Base
 
 __local = True
