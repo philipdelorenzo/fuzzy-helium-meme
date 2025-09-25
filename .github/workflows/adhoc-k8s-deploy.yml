@@ -13,6 +13,10 @@ env:
   ECR_REPO_NAME: helium
   K8S_MANIFEST_PATH: k8s/overlays
 
+permissions:
+  id-token: write # <-- Add this line
+  contents: read # You might also need this for checkout
+
 jobs:
   kubernetes_image_deploy:
     if: (github.event_name == 'workflow_dispatch')
