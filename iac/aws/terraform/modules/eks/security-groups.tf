@@ -1,7 +1,7 @@
 # security_groups.tf
 # Security group for EKS cluster
 resource "aws_security_group" "eks_cluster_sg" {
-  name        = "${var.cluster_name}-cluster-sg"
+  name        = "${var.CLUSTER_NAME}-cluster-sg"
   description = "Security group for EKS cluster"
   vpc_id      = local.vpc_id
 
@@ -24,14 +24,14 @@ resource "aws_security_group" "eks_cluster_sg" {
   tags = merge(
     local.common_tags,
     {
-      Name = "${var.cluster_name}-cluster-sg"
+      Name = "${var.CLUSTER_NAME}-cluster-sg"
     }
   )
 }
 
 # Security group for EKS nodes
 resource "aws_security_group" "eks_node_sg" {
-  name        = "${var.cluster_name}-node-sg"
+  name        = "${var.CLUSTER_NAME}-node-sg"
   description = "Security group for EKS nodes"
   vpc_id      = local.vpc_id
 
@@ -70,7 +70,7 @@ resource "aws_security_group" "eks_node_sg" {
   tags = merge(
     local.common_tags,
     {
-      Name = "${var.cluster_name}-node-sg"
+      Name = "${var.CLUSTER_NAME}-node-sg"
     }
   )
 }

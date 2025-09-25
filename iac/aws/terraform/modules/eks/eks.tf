@@ -1,7 +1,7 @@
 # eks.tf
 # EKS Cluster
 resource "aws_eks_cluster" "main" {
-  name     = var.cluster_name
+  name     = var.CLUSTER_NAME
   role_arn = aws_iam_role.eks_cluster_role.arn
   version  = var.cluster_version
 
@@ -23,7 +23,7 @@ resource "aws_eks_cluster" "main" {
   tags = merge(
     local.common_tags,
     {
-      Name = var.cluster_name
+      Name = var.CLUSTER_NAME
     }
   )
 }
@@ -31,7 +31,7 @@ resource "aws_eks_cluster" "main" {
 # EKS Node Group
 resource "aws_eks_node_group" "main" {
   cluster_name    = aws_eks_cluster.main.name
-  node_group_name = "${var.cluster_name}-nodes"
+  node_group_name = "${var.CLUSTER_NAME}-nodes"
   node_role_arn   = aws_iam_role.eks_node_role.arn
   subnet_ids      = length(local.private_subnet_ids) > 0 ? local.private_subnet_ids : data.aws_db_subnet_group.aurora.subnet_ids
 
@@ -67,7 +67,7 @@ resource "aws_eks_node_group" "main" {
   tags = merge(
     local.common_tags,
     {
-      Name = "${var.cluster_name}-nodes"
+      Name = "${var.CLUSTER_NAME}-nodes"
     }
   )
 

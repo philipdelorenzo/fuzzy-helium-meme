@@ -4,13 +4,13 @@
 
 # Optional: CloudWatch Log Group for EKS cluster logs
 resource "aws_cloudwatch_log_group" "eks_cluster" {
-  name              = "/aws/eks/${var.cluster_name}/cluster"
+  name              = "/aws/eks/${var.CLUSTER_NAME}/cluster"
   retention_in_days = 7
 
   tags = merge(
     local.common_tags,
     {
-      Name = "${var.cluster_name}-cluster-logs"
+      Name = "${var.CLUSTER_NAME}-cluster-logs"
     }
   )
 }
@@ -23,19 +23,19 @@ resource "aws_kms_key" "eks_secrets" {
   tags = merge(
     local.common_tags,
     {
-      Name = "${var.cluster_name}-secrets-key"
+      Name = "${var.CLUSTER_NAME}-secrets-key"
     }
   )
 }
 
 resource "aws_kms_alias" "eks_secrets" {
-  name          = "alias/${var.cluster_name}-secrets"
+  name          = "alias/${var.CLUSTER_NAME}-secrets"
   target_key_id = aws_kms_key.eks_secrets.key_id
 }
 
 # Optional: Create a dedicated service account for database access
 resource "aws_iam_role" "database_access_role" {
-  name = "${var.cluster_name}-database-access-role"
+  name = "${var.CLUSTER_NAME}-database-access-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -61,7 +61,7 @@ resource "aws_iam_role" "database_access_role" {
 
 # Policy for accessing AWS Secrets Manager (for database credentials)
 resource "aws_iam_policy" "database_secrets_policy" {
-  name        = "${var.cluster_name}-database-secrets-policy"
+  name        = "${var.CLUSTER_NAME}-database-secrets-policy"
   description = "Policy for accessing database secrets from Secrets Manager"
 
   policy = jsonencode({
@@ -73,7 +73,7 @@ resource "aws_iam_policy" "database_secrets_policy" {
           "secretsmanager:GetSecretValue",
           "secretsmanager:DescribeSecret"
         ]
-        Resource = "arn:aws:secretsmanager:${var.REGION}:*:secret:${var.cluster_name}/*"
+        Resource = "arn:aws:secretsmanager:${var.REGION}:*:secret:${var.CLUSTER_NAME}/*"
       }
     ]
   })

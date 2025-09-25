@@ -1,7 +1,7 @@
 # iam.tf
 # IAM role for EKS cluster
 resource "aws_iam_role" "eks_cluster_role" {
-  name = "${var.cluster_name}-cluster-role"
+  name = "${var.CLUSTER_NAME}-cluster-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -26,7 +26,7 @@ resource "aws_iam_role_policy_attachment" "eks_cluster_policy" {
 
 # IAM role for EKS node group
 resource "aws_iam_role" "eks_node_role" {
-  name = "${var.cluster_name}-node-role"
+  name = "${var.CLUSTER_NAME}-node-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"

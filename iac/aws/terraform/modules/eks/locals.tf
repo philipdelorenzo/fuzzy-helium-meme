@@ -15,7 +15,7 @@ locals {
     {
       Environment = "production"
       ManagedBy   = "terraform"
-      Cluster     = var.cluster_name
+      Cluster     = var.CLUSTER_NAME
     }
   )
 }

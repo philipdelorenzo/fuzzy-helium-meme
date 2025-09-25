@@ -2,6 +2,8 @@
 
 A simple PostgreSQL client, to connect with AWS Aurora.
 
+See [Synopsis Report](docs/report.md)
+
 ## Prerequisites
 
 There are some prerequisites that will allow the developer to interact with this repo much easier, with
@@ -85,3 +87,23 @@ In order to build the Helium application, there are some extra pieces that are n
 `make init` but you will need to add an aws profile _(a profile in the AWS account you would like to use to install and run the infrastructure)_.
 
 See the [IaC Documentation](./iac/README.md)
+
+## Doppler Configuration
+
+The following variables are needed in the sync'd configuration from Doppler.
+
+Project Name: `<choose-a-project-name>`  
+Configs: `dev`, `stg`, `prd`  
+Variables:
+```yaml
+APP_NAME: <name-of-your-app>
+AURORA_DATABASE_HOST_READ: <aurora-db-read>
+AURORA_DATABASE_HOST_WRITE: <aurora-db-write>
+AWS_ACCOUNT_ID: <aws-account-id>
+AWS_PROFILE: <profile-with-correct-permissions>
+AWS_REGION: <aws-region> # Kept secret to add another layer of complexity for potential bad actors
+TF_VAR_CLUSTER_NAME: <name-of-the-eks-cluster>
+TF_VAR_DB_NAME: <aurora-database-name>
+TF_VAR_DB_PASSWORD: <aurora-database-user>
+TF_VAR_DB_USERNAME: <aurora-database-user-password>
+```
