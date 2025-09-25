@@ -9,6 +9,9 @@ on:
         type: choice
         options:
           - dev
+env:
+  ECR_REPO_NAME: helium
+  AWS_REGION: ${{ secrets.AWS_REGION }}
 
 jobs:
   build_and_push_docker_image:
@@ -22,7 +25,7 @@ jobs:
       uses: aws-actions/configure-aws-credentials@v4
       with:
         role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID}}:role/GitHubOIDCRole
-        aws-region: us-west-2
+        aws-region: ${{ env.AWS_REGION }}
 
     - name: Log in to Amazon ECR
       id: login-ecr
