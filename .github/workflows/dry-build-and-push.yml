@@ -15,7 +15,7 @@ jobs:
     if: (github.event.pull_request.merged == true) || (github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-22.04
     steps:
-    - name: Checkout Documentation Repo
+    - name: Checkout
       uses: actions/checkout@v3
 
     - name: Configure AWS credentials (OIDC)
@@ -55,14 +55,14 @@ jobs:
       if: (${{ inputs.environment }} == 'production')
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: pyops/adrift
+        ECR_REPOSITORY: helium
         IMAGE_TAG: ${{ steps.latest-version.outputs.latest_version }}
       run: |
         if [ -z "$IMAGE_TAG" ]; then
           echo "No latest version found, using commit SHA as tag"
           IMAGE_TAG=${{ github.sha }}
         fi
-        docker build -f ${{ github.workspace }}/docker/Dockerfile -t $ECR_REPOSITORY:$IMAGE_TAG .
+        cd ${{ github.workspace }}/helium || exit 1 && docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
 
         # Tag and push the image to ECR
         docker tag $ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
