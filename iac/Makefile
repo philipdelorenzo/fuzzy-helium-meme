@@ -24,10 +24,10 @@ export DTOKEN_EVAL
 IS_TOKEN := $$(bash -c "$$DTOKEN_EVAL")
 
 ############# Development Section #############
-.PHONY: prereqs bootstrapinit
+.PHONY: prereqs bootstrap init
 prereqs:
-	@[[ ${IS_TOKEN} == "[CRITICAL] - The .doppler file is missing, please set the Doppler token in this file." ]] && (echo "${IS_TOKEN}" && exit 1)
-	@bash -l "scripts/prereqs.sh"
+	@if [[ ${IS_TOKEN} == '[CRITICAL] - The .doppler file is missing, please set the Doppler token in this file.' ]]; then echo "${IS_TOKEN}" && exit 1; fi
+	@export AWS_PROFILE=${AWS_PROFILE} && bash -l "scripts/prereqs.sh"
 
 fmt: ##@development Formats the terraform files
 	$(info ********** Formatting Terraform Files **********)

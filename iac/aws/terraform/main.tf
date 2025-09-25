@@ -49,6 +49,8 @@ module "eks" {
   source = "./modules/eks"
 
   # Aurora - from aurora module
+  CLUSTER_NAME            = var.CLUSTER_NAME
+  OIDC_ROLE               = var.OIDC_ROLE
   aurora_security_group_id = module.aurora.security_group_id
   aurora_subnet_group_name = module.aurora.subnet_group_name
   tags                     = local.common_tags

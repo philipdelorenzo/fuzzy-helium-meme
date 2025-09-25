@@ -1,3 +1,13 @@
+variable "CLUSTER_NAME" {
+  description = "Name of the EKS cluster"
+  type        = string
+}
+
+variable "OIDC_ROLE" {
+  description = "ARN of the IAM Role for GitHub Actions OIDC access"
+  type        = string
+}
+
 variable "environment" {
   description = "Environment name (e.g., dev, staging, prod)"
   type        = string

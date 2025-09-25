@@ -71,7 +71,7 @@ output "public_subnet_ids" {
 
 output "kubectl_config_command" {
   description = "Command to update kubectl configuration"
-  value       = "aws eks --region ${var.REGION} update-kubeconfig --name ${var.cluster_name}"
+  value       = "aws eks --region ${var.REGION} update-kubeconfig --name ${var.CLUSTER_NAME}"
 }
 
 output "cluster_name" {

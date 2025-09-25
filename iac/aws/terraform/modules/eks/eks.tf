@@ -13,6 +13,10 @@ resource "aws_eks_cluster" "main" {
     public_access_cidrs     = ["0.0.0.0/0"]
   }
 
+  access_config {
+    authentication_mode = "API_AND_CONFIG_MAP"
+  }
+
   # Enable EKS Cluster Control Plane Logging
   enabled_cluster_log_types = ["api", "audit", "authenticator", "controllerManager", "scheduler"]
 
@@ -74,5 +78,20 @@ resource "aws_eks_node_group" "main" {
   # Allow external changes without Terraform plan difference
   lifecycle {
     ignore_changes = [scaling_config[0].desired_size]
+  }
+}
+
+resource "aws_eks_access_entry" "github_actions_ci" {
+  cluster_name      = var.CLUSTER_NAME
+  principal_arn     = var.OIDC_ROLE
+  depends_on = [aws_eks_cluster.main]
+}
+
+resource "aws_eks_access_policy_association" "github_actions_admin_policy" {
+  cluster_name = aws_eks_cluster.main.name
+  principal_arn = aws_eks_access_entry.github_actions_ci.principal_arn
+  policy_arn   = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+  access_scope {
+    type = "cluster"
   }
 }

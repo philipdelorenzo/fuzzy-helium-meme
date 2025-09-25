@@ -3,6 +3,16 @@ variable "project_name" {
   type        = string
 }
 
+variable "CLUSTER_NAME" {
+  description = "Name of the EKS cluster"
+  type        = string
+}
+
+variable "OIDC_ROLE" {
+  description = "OIDC role for the EKS cluster"
+  type        = string
+}
+
 variable "REGION" {
   description = "AWS region"
   type        = string

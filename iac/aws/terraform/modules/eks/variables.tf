@@ -4,6 +4,11 @@ variable "CLUSTER_NAME" {
   type        = string
 }
 
+variable "OIDC_ROLE" {
+  description = "ARN of the IAM Role for GitHub Actions OIDC access"
+  type        = string
+}
+
 variable "cluster_version" {
   description = "Kubernetes version"
   type        = string

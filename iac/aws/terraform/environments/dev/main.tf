@@ -16,6 +16,8 @@ module "aurora_stack" {
   source = "../../"
 
   project_name            = var.project_name
+  CLUSTER_NAME            = var.CLUSTER_NAME
+  OIDC_ROLE               = var.OIDC_ROLE
   environment             = "dev"
   REGION                  = var.REGION      # TF_VAR_REGION must be set in your environment or Doppler
   DB_NAME                 = var.DB_NAME     # TF_VAR_DATABASE_NAME must be set in your environment or Doppler
