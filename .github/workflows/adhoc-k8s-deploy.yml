@@ -14,8 +14,8 @@ env:
   K8S_MANIFEST_PATH: k8s/overlays
 
 permissions:
-  id-token: write # <-- Add this line
-  contents: read # You might also need this for checkout
+  id-token: write
+  contents: read
 
 jobs:
   kubernetes_image_deploy:

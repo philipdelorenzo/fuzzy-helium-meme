@@ -2,13 +2,7 @@ on:
   workflow_call:
 
   workflow_dispatch:
-    inputs:
-      environment:
-        description: 'Environment to Deploy to...'
-        required: true
-        type: choice
-        options:
-          - dev
+
 env:
   ECR_REPO_NAME: helium
   AWS_REGION: ${{ secrets.AWS_REGION }}
@@ -16,6 +10,7 @@ env:
 jobs:
   build_and_push_docker_image:
     if: (github.event.pull_request.merged == true) || (github.event_name == 'workflow_dispatch')
+    environment: "dev" # Only set environment for workflow_dispatch events
     runs-on: ubuntu-22.04
     steps:
     - name: Checkout
@@ -55,7 +50,6 @@ jobs:
       shell: bash
 
     - name: Build, tag, and push image to ECR
-      if: (${{ inputs.environment }} == 'production')
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         ECR_REPOSITORY: helium
