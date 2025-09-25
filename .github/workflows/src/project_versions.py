@@ -81,7 +81,7 @@ def _version_check(version: str) -> bool:
 def version_tuple(v):
     return tuple(map(int, v.lstrip("v").split(".")))
 
-def prechecks(obj: list[dict]) -> bool:
+def prechecks(obj: list[dict]) -> bool|None:
     """
     This function will run some prechecks to make sure that the data is correct.
 
