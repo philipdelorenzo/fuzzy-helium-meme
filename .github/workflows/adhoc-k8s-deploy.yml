@@ -88,3 +88,4 @@ jobs:
         
         # Optional: Check rollout status
         kubectl rollout status deployment/helium -n helium
+      shell: bash
