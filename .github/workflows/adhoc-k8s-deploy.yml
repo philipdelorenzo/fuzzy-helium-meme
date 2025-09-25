@@ -80,10 +80,13 @@ jobs:
     # 4. Deploy using Kustomize
     - name: Deploy to Kubernetes
       run: |
+        # Update kubeconfig (redundant but ensures config is fresh)
+        aws eks update-kubeconfig --name ${{ secrets.TF_VAR_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
+        
         # Ensure namespace exists
         kubectl apply -f ${{ github.workspace }}/${{ env.K8S_PREREQS_PATH }}/namespace.yaml
-        # The 'kustomize build' command generates the final YAML, 
-        # which is piped to 'kubectl apply -f -'
+        
+        # The 'kustomize build' command generates the final YAML, which is piped to 'kubectl apply -f -'
         kubectl apply -k ${{ github.workspace }}/${{ env.K8S_MANIFEST_PATH }}
         
         # Optional: Check rollout status
