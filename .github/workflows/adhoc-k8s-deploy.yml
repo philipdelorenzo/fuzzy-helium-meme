@@ -69,7 +69,23 @@ jobs:
     - name: Update deployment manifest image
       run: |
         sed -i "s|helium:latest|${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.latest-version.outputs.latest_version }}|g" ${{ github.workspace }}/${{ env.K8S_BASE_PATH }}/deployment.yaml
-        cat ${{ github.workspace }}/${{ env.K8S_BASE_PATH }}/deployment.yaml # Optional: view the updated manifest
+        
+        # Update other config values if needed (example)
+        ENCODED_DB_NAME=$(echo -n "${{ secrets.DB_NAME }}" | base64 -w 0)
+        ENCODED_DB_USERNAME=$(echo -n "${{ secrets.DB_USERNAME }}" | base64 -w 0)
+        ENCODED_DB_PASSWORD=$(echo -n "${{ secrets.DB_PASSWORD }}" | base64 -w 0)
+
+        sed -i "s|__DB_NAME__|${ENCODED_DB_NAME}|g" ${{ github.workspace }}/${{ env.K8S_BASE_PATH }}/secrets.yaml
+        sed -i "s|__DB_USERNAME__|${ENCODED_DB_USERNAME}|g" ${{ github.workspace }}/${{ env.K8S_BASE_PATH }}/secrets.yaml
+        sed -i "s|__DB_PASSWORD__|${ENCODED_DB_PASSWORD}|g" ${{ github.workspace }}/${{ env.K8S_BASE_PATH }}/secrets.yaml
+
+        sed -i "s|__APP_NAME__|${{ secrets.APP_NAME }}|g" ${{ github.workspace }}/${{ env.K8S_BASE_PATH }}/config.yaml
+        sed -i "s|__IMAGE_NAME__|${{ secrets.IMAGE_NAME }}|g" ${{ github.workspace }}/${{ env.K8S_BASE_PATH }}/config.yaml
+        sed -i "s|__IMAGE_TAG__|${{ steps.latest-version.outputs.latest_version }}|g" ${{ github.workspace }}/${{ env.K8S_BASE_PATH }}/config.yaml
+        sed -i "s|__REGION__|${{ secrets.AWS_REGION }}|g" ${{ github.workspace }}/${{ env.K8S_BASE_PATH }}/config.yaml
+        
+        cat ${{ github.workspace }}/${{ env.K8S_BASE_PATH }}/deployment.yaml
+        cat ${{ github.workspace }}/${{ env.K8S_BASE_PATH }}/config.yaml
 
     - name: Deploy to Kubernetes
       run: |
