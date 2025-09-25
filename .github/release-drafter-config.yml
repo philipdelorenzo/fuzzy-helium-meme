@@ -1,4 +1,4 @@
-name-template: "Philip De Lorenzo -- $APP_NAME v$RESOLVED_VERSION"
+name-template: "Philip De Lorenzo -- Helium API Client v$RESOLVED_VERSION"
 tag-template: "v$RESOLVED_VERSION"
 categories:
   - title: "🚀 Features"
@@ -18,11 +18,11 @@ categories:
 change-template: "- $TITLE @$AUTHOR (#$NUMBER)"
 change-title-escapes: '\<*_&' # You can add # and @ to disable mentions, and add ` to disable code blocks.
 template: |
-  ## Philip De Lorenzo - ${APP_NAME} Release Notes
+  ## Philip De Lorenzo - Helium API Client Release Notes
 
-  #### Philip De Lorenzo - ${APP_NAME} v$RESOLVED_VERSION
+  #### Philip De Lorenzo - Helium API Client v$RESOLVED_VERSION
 
-  *This is the official release of ${APP_NAME} version $RESOLVED_VERSION.*
+  *This is the official release of Helium API Client version $RESOLVED_VERSION.*
   This tool is designed for testing purposes only, and to showcase the manner in which I work as a Platform Engineer/DevOps/SRE/Developer.
 
   -- *Philip De Lorenzo - Platform Engineer*
@@ -37,7 +37,7 @@ template: |
   ## Installation
 
   ```bash
-  # Install the latest version of Unity Project -- ${APP_NAME}
+  # Install the latest version of the Helium API Client
   More coming soon...
   ```
   
