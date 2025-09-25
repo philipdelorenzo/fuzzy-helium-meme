@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: helium
+  namespace: helium  # Sets Namespace
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: helium
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080

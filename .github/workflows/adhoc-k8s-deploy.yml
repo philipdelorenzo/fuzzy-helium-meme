@@ -1,0 +1,92 @@
+name: Deploy ECR Image to Kubernetes
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to Deploy to...'
+        required: true
+        type: choice
+        options:
+          - dev
+env:
+  ECR_REPO_NAME: helium
+  K8S_MANIFEST_PATH: k8s/overlays
+
+jobs:
+  kubernetes_image_deploy:
+    if: (github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-22.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials (OIDC)
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID}}:role/GitHubOIDCRole
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Log in to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v2
+
+    - name: Install Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.13'
+
+    - name: Install Python Dependencies
+      run: |
+        pip install -r ${{ github.workspace }}/.github/workflows/src/requirements.txt
+      shell: bash
+
+    - name: Current Release Version
+      if: github.event_name == 'workflow_dispatch'
+      id: latest-version
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        #!/bin/bash
+        echo "Getting latest release version"
+        _version=$(python ${{ github.workspace }}/.github/workflows/src/project_versions.py --latest)
+        echo "Latest Release Version: $_version"
+        echo "latest_version=$_version" >> $GITHUB_OUTPUT
+      shell: bash
+
+    # Install kubectl (needed for the kustomize command)
+    - name: Set up kubectl and Kustomize
+      uses: azure/setup-kubectl@v3
+      with:
+        # kubectl comes bundled with kustomize
+        version: 'v1.27.0' 
+    
+    - name: Update kubeconfig for EKS
+      run: |
+        aws eks update-kubeconfig --name ${{ secrets.TF_VAR_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
+
+    #- name: Update deployment manifest image
+    #  run: |
+    #    # 📝 IMPORTANT: Replace 'my-app-image' with the actual image name used in your deployment.yaml
+    #    sed -i "s|my-app-image:latest|${{ env.ECR_URI }}|g" ${{ env.K8S_MANIFEST_PATH }}
+    #    cat ${{ env.K8S_MANIFEST_PATH }} # Optional: view the updated manifest
+#
+    #- name: Deploy Image to Kubernetes
+    #  env:
+    #    ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+    #    ECR_REPOSITORY: helium
+    #    IMAGE_TAG: ${{ steps.latest-version.outputs.latest_version }}
+    #  run: |
+    #    if [ -z "$IMAGE_TAG" ]; then
+    #      echo "No latest version found, using commit SHA as tag"
+    #      IMAGE_TAG=${{ github.sha }}
+    #    fi
+    #    cd ${{ github.workspace }}/helium || exit 1 && docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
+#
+    #    # Tag and push the image to ECR
+    #    docker tag $ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+    #    docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+#        
+    #    # Optionally, tag the image as 'latest' and push it
+    #    docker tag $ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
+    #    docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
