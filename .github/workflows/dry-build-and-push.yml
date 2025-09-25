@@ -63,6 +63,10 @@ jobs:
           echo "No latest version found, using commit SHA as tag"
           IMAGE_TAG=${{ github.sha }}
         fi
+        # We need to build our production.txt - the pip requirements for production
+        pip install -r ${{ github.workspace }}/requirements.txt
+        poetry --directory ${{ github.workspace }}/helium export -f requirements.txt --output ${{ github.workspace }}/helium/production.txt --without-hashes
+
         cd ${{ github.workspace }}/helium || exit 1 && docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
 
         # Tag and push the image to ECR
