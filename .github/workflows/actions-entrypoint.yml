@@ -151,26 +151,8 @@ jobs:
   # The build/push and deploy only run if this is a merged PR AND all previous jobs have succeeded
   # This ensures that we only build/deploy code that has passed all tests and checks
   build_and_push:
+    # Change the below line to `needs.dataReportJob.outputs.is_pr_merge == 'no run'` to NEVER run the build/push job
     if: needs.dataReportJob.outputs.is_pr_merge == 'true'
-    needs: [update_release_draft, releasePreparation, dataReportJob, set-release-version]
+    needs: [update_release_draft, releasePreparation, dataReportJob]
     uses: ./.github/workflows/dry-build-and-push.yml
-    with:
-      version: ${{ needs.set-release-version.outputs.draft_version }}
-    secrets:
-      region: ${{ secrets.REGION }}
-      project_id: ${{ secrets.PROJECT_ID }}
-      service_name: ${{ secrets.SERVICE_NAME }}
-      service_account: ${{ secrets.SERVICE_ACCOUNT }}
-#
-  #deploy:
-  #  if: needs.dataReportJob.outputs.is_pr_merge == 'true'
-  #  needs: [update_release_draft, releasePreparation, dataReportJob, build_and_push]
-  #  uses: ./.github/workflows/dry-cloudrun-deploy.yml
-  #  with:
-  #    deploy: 'false' # This must be set to 'true' to enable deployment
-  #    environment: 'development'
-  #  secrets:
-  #    region: ${{ secrets.REGION }}
-  #    project_id: ${{ secrets.PROJECT_ID }}
-  #    service_name: ${{ secrets.SERVICE_NAME }}
-  #    service_account: ${{ secrets.SERVICE_ACCOUNT }}
+
