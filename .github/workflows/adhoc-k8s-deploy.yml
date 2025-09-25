@@ -10,7 +10,7 @@ on:
         options:
           - dev
 env:
-  ECR_REPO_NAME: helium
+  ECR_REPOSITORY: helium
   K8S_PREREQS_PATH: k8s/prereqs
   K8S_BASE_PATH: k8s/base
   K8S_MANIFEST_PATH: k8s/overlays
@@ -74,8 +74,8 @@ jobs:
 
     - name: Update deployment manifest image
       run: |
-        sed -i "s|helium:latest|${{ steps.login-ecr.outputs.registry }}:${{ steps.latest-version.outputs.latest_version }}|g" ${{ github.workspace }}/${{ env.K8S_BASE_PATH }}/deployment.yaml
-        cat ${{ github.workspace }}/${{ env.K8S_MANIFEST_PATH }} # Optional: view the updated manifest
+        sed -i "s|helium:latest|${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ steps.latest-version.outputs.latest_version }}|g" ${{ github.workspace }}/${{ env.K8S_BASE_PATH }}/deployment.yaml
+        cat ${{ github.workspace }}/${{ env.K8S_BASE_PATH }}/deployment.yaml # Optional: view the updated manifest
 
     # 4. Deploy using Kustomize
     - name: Deploy to Kubernetes

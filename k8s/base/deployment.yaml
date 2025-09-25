@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: helium
-          image: pyops/helium:latest
+          image: helium:latest
           imagePullPolicy: IfNotPresent  # IfNotPresent, The image is pre-loaded using 'kind load docker-image'
           # Enironment Vars from Secrets examples
           env:
