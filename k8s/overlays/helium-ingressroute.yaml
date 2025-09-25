@@ -1,0 +1,17 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: helium-http
+  namespace: helium
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`adrift.pyflowops.local`) && PathPrefix(`/`)
+      kind: Rule
+      services:
+        - name: adrift
+          port: 8501
+          scheme: http
+          passHostHeader: true
